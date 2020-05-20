@@ -55,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
             //los agrego al arraylist que me muestra en el RecyclerView
             add_new_music(new Music(name, autor, duration));
         }
+        else if(Music.Musicas.MusicStatic != null){
+          for (Music musica : Music.Musicas.MusicStatic){
+               musics.add(musica);
+           }
+        }
 
         queue = Volley.newRequestQueue(this);
         get_Music_Data();
