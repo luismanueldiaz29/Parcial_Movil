@@ -61,23 +61,18 @@ public class addMusic extends AppCompatActivity {
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetMusic();
+                Get_Music_Search();
             }
         });
     }
 
     public void addMusic(){
         //con el metodo addMusic() paso el nombre de la cancion al MainActivity, para eso valido que no se pasen datos nulos
-
-        if(tvCancion.getText().toString() != ""){
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("NewMusic", tvCancion.getText().toString());
-            intent.putExtra("duration", tvDireccion.getText().toString());
-            intent.putExtra("autor", tvArtista.getText().toString());
-            startActivity(intent);
-        }else{
-            Toast.makeText(getApplicationContext(), "not", Toast.LENGTH_LONG).show();
-        }
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("NewMusic", tvCancion.getText().toString());
+        intent.putExtra("duration", tvDireccion.getText().toString());
+        intent.putExtra("autor", tvArtista.getText().toString());
+        startActivity(intent);
     }
 
     @Override
@@ -92,8 +87,12 @@ public class addMusic extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.save:
-                Toast.makeText(getApplicationContext(), "Add music", Toast.LENGTH_LONG).show();
-                addMusic();
+                //Toast.makeText(getApplicationContext(), "Add music", Toast.LENGTH_LONG).show();
+                if (tvCancion.getText().toString() != "") {
+                    addMusic();
+                }else{
+                    Toast.makeText(getApplicationContext(), "not", Toast.LENGTH_LONG).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -101,8 +100,10 @@ public class addMusic extends AppCompatActivity {
     }
 
 
-    private void GetMusic(){
+    private void Get_Music_Search(){
         String buscar = txtBuscar.getText().toString();
+
+        //busca la cansion en el api de deezer
         String URL = "https://api.deezer.com/search?q="+buscar;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, (String) null,
                 new Response.Listener<JSONObject>() {

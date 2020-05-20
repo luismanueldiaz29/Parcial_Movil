@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private androidx.recyclerview.widget.RecyclerView RecyclerView;
     private Adapter adapterMusic;
     private ArrayList<Music> musics;
+
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private static final String USGS_REQUEST_URL = "https://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=b284db959637031077380e7e2c6f2775&format=json";
@@ -46,15 +47,17 @@ public class MainActivity extends AppCompatActivity {
         musics = new ArrayList<Music>();
 
         if(getIntent().getStringExtra("NewMusic") != null){
+            //capturo los datos que envio desde el otro activity
             String name = getIntent().getStringExtra("NewMusic");
             String duration = getIntent().getStringExtra("duration");
             String autor = getIntent().getStringExtra("autor");
-            Toast.makeText(getApplicationContext(), name, Toast.LENGTH_LONG ).show();
-            musics.add(new Music(name, autor, duration));
+
+            //los agrego al arraylist que me muestra en el RecyclerView
+            add_new_music(new Music(name, autor, duration));
         }
 
         queue = Volley.newRequestQueue(this);
-        GetData();
+        get_Music_Data();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +68,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    public void add_new_music(Music music){
+        Music.Musicas.MusicStatic.add(music);
+        for (Music musica : Music.Musicas.MusicStatic){
+            musics.add(musica);
+        }
+    }
 
     public void add_music(){
         Toast.makeText(getApplicationContext(), "Add music", Toast.LENGTH_LONG).show();
@@ -73,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void GetData(){
+    private void get_Music_Data(){
         JsonObjectRequest request  = new JsonObjectRequest(Request.Method.GET, USGS_REQUEST_URL, (String) null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -82,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             RecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
                             RecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
 
                             JSONObject jsonObjectContacts = response.getJSONObject("tracks");
                             JSONArray jsonArrayTrack = jsonObjectContacts.getJSONArray("track");
@@ -99,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
                             adapterMusic = new Adapter(musics);
                             RecyclerView.setAdapter(adapterMusic);
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();

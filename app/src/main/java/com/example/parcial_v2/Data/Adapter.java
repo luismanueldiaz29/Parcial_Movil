@@ -42,8 +42,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements
 
     @Override
     public void onBindViewHolder(Adapter.ViewHolder holder, int position) {
-        holder.name.setText(Musics.get(position).title);
-        holder.duration.setText(Musics.get(position).duration);
+        holder.name.setText("Cancion : "+Musics.get(position).title);
+        holder.duration.setText("Duracion : "+Musics.get(position).duration);
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

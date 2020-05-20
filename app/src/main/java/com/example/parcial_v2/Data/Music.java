@@ -16,6 +16,7 @@ public class Music {
 
 
     public static class Musicas{
-        public static ArrayList<Music> musics;
+        //mi variable statica para registrar las nuevas canciones a la playlist
+        public static ArrayList<Music> MusicStatic = new ArrayList<Music>();
     }
 }
